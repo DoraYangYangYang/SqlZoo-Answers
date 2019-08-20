@@ -1,0 +1,40 @@
+/*question 6*/
+
+select sum(sze) from student
+join attends 
+on student.id = attends.student
+join event
+on attends.event = event.id
+and event.modle = 'co72010'
+group by event.id
+
+/*question 7*/
+SELECT modle, count(distinct staff) from teaches 
+join event
+on event.id = teaches.event
+and modle like 'co7%'
+group by modle
+
+/*question 8*/
+SELECT distinct modle.name FROM modle
+JOIN event
+ON modle.id = event.modle
+JOIN occurs
+ON event.id = occurs.event
+AND event in (SELECT event from occurs group by event having count (distinct week) < 10)
+
+/*question 9*/
+SELECT id from event
+join (select dow, tod from event where modle = 'co72010')A
+on event.tod = A.tod
+and event.dow = A.dow
+and modle!= 'co72010'
+
+/*question 10*/
+Select COUNT(*) from (
+SELECT staff, sum(duration) from event
+join teaches
+on event.id = teaches.event
+group by staff
+having sum(duration) >
+(select sum(duration)/count(distinct staff) as avg from event join teaches on event.id = teaches.event))A
