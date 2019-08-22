@@ -58,3 +58,23 @@ where id in (select event from teaches where staff = 'co.CHt'))B
 WHERE A.dow = B.dow
 AND A.tod > B.tod and A.tod < B.ED
 
+/*question 12*/
+SELECT A.room, A.utilization, B.occupancy From
+(select distinct room, capacity, sum(sze)*100/sum(capacity) as utilization from event
+join attends on
+event.id = attends.event
+join student
+on attends.student = student.id
+join room
+on event.room = room.id
+and capacity > 60
+group by 1,2)A
+JOIN
+(select room, capacity, round(sum(duration)*100/(24*5),2) as occupancy from event
+join room 
+on event.room = room.id 
+and capacity > 60
+group by room, capacity)B
+ON A.room = B.room
+
+
