@@ -38,3 +38,23 @@ on event.id = teaches.event
 group by staff
 having sum(duration) >
 (select sum(duration)/count(distinct staff) as avg from event join teaches on event.id = teaches.event))A
+
+/*question 11*/
+SELECT DISTINCT * FROM 
+(SELECT id, dow, tod, duration, tod+duration as ED from event
+where id in (select event from teaches where staff = 'co.ACg'))A
+join
+(SELECT id, dow, tod, duration, tod+duration as ED  from event
+where id in (select event from teaches where staff = 'co.CHt'))B
+WHERE A.dow = B.dow
+and B.tod > A.tod and B.tod < A.ED
+UNION
+SELECT DISTINCT * FROM 
+(SELECT id, dow, tod, duration, tod+duration as ED from event
+where id in (select event from teaches where staff = 'co.ACg'))A
+join
+(SELECT id, dow, tod, duration, tod+duration as ED  from event
+where id in (select event from teaches where staff = 'co.CHt'))B
+WHERE A.dow = B.dow
+AND A.tod > B.tod and A.tod < B.ED
+
