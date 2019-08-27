@@ -1,0 +1,35 @@
+/*question 1*/
+SELECT firstname, EmailAddress from Customer
+WHERE CompanyName = 'Bike World'
+
+/*question 2*/
+SELECT CompanyName FROM Customer
+JOIN CustomerAddress
+ON Customer.CustomerID = CustomerAddress.CustomerID
+JOIN Address
+ON CustomerAddress.AddressID = Address.AddressID
+AND City = 'Dallas'
+
+/*question 3*/
+SELECT Count(distinct SalesOrderID)
+FROM SalesOrderDetail A
+JOIN Product B
+ON A.ProductID = B.ProductID
+AND B.ListPrice > 1000
+
+/*question 4*/
+SELECT CompanyName FROM Customer A
+JOIN SalesOrderHeader B
+ON A.CustomerID = B.CustomerID
+WHERE SubTotal+TaxAmt+Freight> 100000
+
+/*question 5*/
+SELECT Sum(OrderQty) FROM SalesOrderDetail A
+JOIN Product B
+On A.ProductID = B.ProductID
+JOIN SalesOrderHeader C
+ON A.SalesOrderID = C.SalesOrderID
+JOIN Customer D
+ON C.CustomerID = D.CustomerID
+AND B.Name = 'Racing Socks, L'
+AND D.CompanyName = 'Riding Cycles'
