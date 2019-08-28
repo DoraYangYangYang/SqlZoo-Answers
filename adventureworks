@@ -33,3 +33,60 @@ JOIN Customer D
 ON C.CustomerID = D.CustomerID
 AND B.Name = 'Racing Socks, L'
 AND D.CompanyName = 'Riding Cycles'
+
+/*question 6*/
+SELECT SalesOrderID, UnitPrice FROM SalesOrderDetail
+WHERE SalesOrderID in(
+SELECT SalesOrderID
+FROM SalesOrderDetail
+Group by 1
+Having count(distinct ProductID) = 1)
+
+/*question 7*/
+SELECT B.name, E.CompanyName FROM ProductModel A
+JOIN Product B
+ON A.ProductModelID = B.ProductModelID
+JOIN SalesOrderDetail C
+ON B.ProductID = C.ProductID
+JOIN SalesOrderHeader D
+ON C.SalesOrderID = D.SalesOrderID
+JOIN Customer E
+ON D.CustomerID = E.CustomerID
+AND A.name = 'Racing Socks'
+
+/*question 8*/
+SELECT Description FROM ProductDescription A
+JOIN ProductModelProductDescription B
+ON A.ProductDescriptionID = B.ProductDescriptionID
+JOIN ProductModel C
+ON B.ProductModelID = C.ProductModelID
+JOIN Product D
+ON C.ProductModelID = D.ProductModelID
+AND Culture = 'fr'
+AND D.ProductID = '736'
+
+/*question 9*/
+SELECT CompanyName, SubTotal, SUM(OrderQty*Weight) FROM SalesOrderHeader A
+JOIN SalesOrderDetail B
+ON A.SalesOrderID = B.SalesOrderID
+JOIN Product C
+ON B.ProductID = C.ProductID
+JOIN Customer D
+ON A.CustomerID = D.CustomerID
+Group by 1,2
+Order by SubTotal DESC
+
+/*question 10*/
+SELECT SUM(C*OrderQty) FROM(
+SELECT Count(A.ProductID) as C, OrderQty FROM Product A
+JOIN ProductCategory B
+ON A.ProductCategoryID = B.ProductCategoryID
+JOIN SalesOrderDetail C
+ON A.ProductID = C.ProductID
+JOIN SalesOrderHeader D
+ON C.SalesOrderID = D.SalesOrderID
+JOIN Address E
+ON D.ShipToAddressID = E.AddressID
+WHERE City = 'London'
+AND B.Name = 'Cranksets'
+Group By OrderQty)F
